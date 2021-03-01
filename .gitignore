@@ -2,3 +2,4 @@
 .idea
 go.sum
 *.exe
+.DS_Store
