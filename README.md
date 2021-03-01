@@ -12,7 +12,7 @@ Simple Golang REST API Boilerplate with clean Architecture
 
 ## Requirment
 - Database : `MySQL`
-- Go v1.14.x
+- Go v1.13.x
 ## Install 
 Download or clone this project
 ```shell script

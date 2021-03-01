@@ -1,5 +1,7 @@
-.env
-.idea
-go.sum
-*.exe
-.DS_Store
+*
+!lib
+!go.mod
+!.gitignore
+!.env.example
+!main.go
+!README.md
