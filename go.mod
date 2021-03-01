@@ -1,4 +1,4 @@
-module maheswari-db-converter
+module github.com/pujexx/go-boilerplate
 
 go 1.13
 

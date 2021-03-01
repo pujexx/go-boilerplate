@@ -5,16 +5,18 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/pujexx/go-boilerplate/lib"
+	"github.com/pujexx/go-boilerplate/lib/gen"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"log"
-	"maheswari-db-converter/lib"
-	"maheswari-db-converter/lib/gen"
 	"net/http"
 	"os"
 	"time"
-	)
+
+)
+
 
 
 
@@ -75,6 +77,7 @@ func main() {
 	//implement generator
 
 	//end of implement generator
+
 
 	generator := gen.NewGenerator(db)
 	generator.GeneratorCLI()
