@@ -1,4 +1,4 @@
-# Maheswari-boilerplate
+# go-boilerplate
 Simple Golang REST API Boilerplate with clean Architecture
 
 ## To Do List
