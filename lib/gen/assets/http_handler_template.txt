@@ -1,0 +1,156 @@
+package http
+
+import (
+	"encoding/json"
+	"fmt"
+	"github.com/gorilla/mux"
+	"{{module_name}}/domain"
+	"{{module_name}}/lib"
+	"net/http"
+	"strconv"
+)
+
+type {{table_title}}HttpHandler struct {
+	Service domain.{{domain_struct}}Service
+}
+
+func New{{domain_struct}}HttpHandler(r *mux.Router, service domain.{{domain_struct}}Service) lib.BaseHandler {
+	h := {{table_title}}HttpHandler{
+		Service: service,
+	}
+	r.HandleFunc("/{{table_name}}",h.Store).Methods("POST")
+	r.HandleFunc("/{{table_name}}/{id}",h.Delete).Methods("DELETE")
+	r.HandleFunc("/{{table_name}}",h.Update).Methods("PUT")
+	r.HandleFunc("/{{table_name}}",h.List).Methods("GET")
+	r.HandleFunc("/{{table_name}}/{id}",h.Detail).Methods("GET")
+	return &h
+}
+
+
+func (a {{table_title}}HttpHandler) Store(w http.ResponseWriter, r *http.Request) {
+	var {{table_title}} domain.{{domain_struct}}
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&{{table_title}}); err != nil {
+		fmt.Println(err)
+		lib.BaseResponse(lib.ResponseError{
+			Code:    "402",
+			Message: "Unprocessable entity",
+			Errors:  []lib.ValidateError{{Field: "json", Error:"invalid json format" }},
+		},w,r)
+		return
+	}
+
+	if s,err := lib.ValidateStruct({{table_title}}) ; !s{
+		lib.BaseResponse(lib.ResponseError{
+			Code:    "402",
+			Message: "Validation errors",
+			Errors:  err,
+		},w,r)
+		return
+	}
+	a.Service.Save(&{{table_title}})
+	lib.BaseResponse(lib.Response{
+		Code: "200",
+		Data: "Success Created",
+	},w,r)
+	return
+}
+
+func (a {{table_title}}HttpHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id := params["id"]
+	if s,err := lib.ValidateVar(id,"{{primary_key}}","required") ; !s{
+		lib.BaseResponse(lib.ResponseError{
+			Code:    "402",
+			Message: "Validation errors",
+			Errors: err ,
+		},w,r)
+		return
+	}
+
+	a.Service.Delete(id)
+	lib.BaseResponse(lib.Response{
+		Code: "200",
+		Data: "Success Deleted",
+	},w,r)
+}
+
+func (a {{table_title}}HttpHandler) Update(w http.ResponseWriter, r *http.Request) {
+	var {{table_title}} domain.{{domain_struct}}
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&{{table_title}}); err != nil {
+		fmt.Println(err)
+		lib.BaseResponse(lib.ResponseError{
+			Code:    "402",
+			Message: "Unprocessable entity",
+			Errors:  []lib.ValidateError{{Field: "json", Error:"invalid json format" }},
+		},w,r)
+		return
+	}
+
+	if s,err := lib.ValidateVar({{table_title}}.{{primary_key_title}},"{{primary_key}}","required") ; !s{
+		lib.BaseResponse(lib.ResponseError{
+			Code:    "402",
+			Message: "Validation errors",
+			Errors:  err,
+		},w,r)
+		return
+	}
+	if s,err := lib.ValidateStruct({{table_title}}) ; !s{
+		lib.BaseResponse(lib.ResponseError{
+			Code:    "402",
+			Message: "Validation errors",
+			Errors:  err,
+		},w,r)
+		return
+	}
+	a.Service.Update(&{{table_title}})
+	lib.BaseResponse(lib.Response{
+		Code: "200",
+		Data: "Success Created",
+	},w,r)
+	return
+}
+
+func (a {{table_title}}HttpHandler) List(w http.ResponseWriter, r *http.Request) {
+	pageString := r.URL.Query().Get("page")
+	page , err := strconv.Atoi(pageString)
+	if err != nil {
+		page = 1
+	}
+	_ , b := a.Service.Find(page,[]lib.FilterDomain{})
+
+	lib.BaseResponse(lib.Response{
+		Code: "200",
+		Data: b.Data,
+		Meta: b.Meta,
+	},w,r)
+}
+
+func (a {{table_title}}HttpHandler) Detail(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id := params["id"]
+	if s,err := lib.ValidateVar(id,"{{primary_key}}","required") ; !s{
+		lib.BaseResponse(lib.ResponseError{
+			Code:    "402",
+			Message: "Validation errors",
+			Errors: err ,
+		},w,r)
+		return
+	}
+	object , err := a.Service.ByID(id)
+	if err != nil {
+		lib.BaseResponse(lib.ResponseError{
+			Code:    "404",
+			Message: "Object not found",
+		},w,r)
+		return
+	}
+	lib.BaseResponse(lib.Response{
+		Code: "200",
+		Data: object,
+	},w,r)
+}
+
+
+

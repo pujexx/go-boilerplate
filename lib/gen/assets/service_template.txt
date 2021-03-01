@@ -1,0 +1,41 @@
+package service
+
+import (
+    "{{module_name}}/domain"
+    "{{module_name}}/lib"
+{{import}}
+)
+
+
+type {{table_title}}Service struct {
+	Repo domain.{{domain_struct}}Repository
+}
+
+
+func New{{domain_struct}}Service(repo domain.{{domain_struct}}Repository) domain.{{domain_struct}}Service {
+	return &{{table_title}}Service{
+		Repo : repo,
+	}
+}
+
+func ({{initial_table}}S {{table_title}}Service ) Save({{initial_table}} *domain.{{domain_struct}}) error {
+     err := {{initial_table}}S.Repo.Save({{initial_table}})
+     return err
+}
+
+func ({{initial_table}}S {{table_title}}Service ) Update({{initial_table}} *domain.{{domain_struct}}) error {
+     err := {{initial_table}}S.Repo.Update({{initial_table}})
+     return err
+}
+
+func ({{initial_table}}S {{table_title}}Service ) ByID(id string) (domain.{{domain_struct}},error) {
+    {{initial_table}}, err := {{initial_table}}S.Repo.ByID(id)
+   	return {{initial_table}}, err
+}
+func ({{initial_table}}S {{table_title}}Service ) Find(page int, filters []lib.FilterDomain)([]domain.{{domain_struct}},lib.Paginator) {
+    {{initial_table}}s , paginate := {{initial_table}}S.Repo.Find(page, filters)
+    return {{initial_table}}s, paginate
+}
+func ({{initial_table}}S {{table_title}}Service ) Delete(id string) error {
+    return {{initial_table}}S.Repo.Delete(id)
+}

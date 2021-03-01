@@ -1,0 +1,31 @@
+package domain
+
+import (
+{{import}}
+)
+
+type {{domain_struct}} struct{
+{{fields}}
+}
+func ({{domain_struct}}) TableName() string {
+	return "{{table_name}}"
+}
+
+// Interface Repository
+type {{domain_struct}}Repository interface {
+    Save(p *{{domain_struct}}) error
+    Update(p *{{domain_struct}}) error
+    ByID(id string) ({{domain_struct}},error)
+    Find(page int, filters []lib.FilterDomain)([]{{domain_struct}},lib.Paginator)
+    Delete(id string) error
+}
+
+// Interface Service
+
+type {{domain_struct}}Service interface {
+    Save(p *{{domain_struct}}) error
+    Update(p *{{domain_struct}}) error
+    ByID(id string) ({{domain_struct}},error)
+    Find(page int, filters []lib.FilterDomain)([]{{domain_struct}},lib.Paginator)
+    Delete(id string) error
+}
