@@ -147,6 +147,15 @@ func (g GeneratorField)GeneratorCLI(){
 					},
 				},
 				{
+					Name:  "http-handler",
+					Usage: "generate service code",
+					Action: func(c *cli.Context) error {
+						g.GeneratorHttpHandler()
+						os.Exit(0)
+						return nil
+					},
+				},
+				{
 					Name:  "implement",
 					Usage: "generate implement code",
 					Action: func(c *cli.Context) error {

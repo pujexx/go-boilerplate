@@ -1,6 +1,15 @@
 # Maheswari-boilerplate
 Simple Golang REST API Boilerplate with clean Architecture
 
+## To Do List
+- [x] Domain generator
+- [x] Repository generator
+- [x] Service generator
+- [x] Http Handler generator
+- [x] Implement on main package generator
+- [ ] Swagger generator
+- [ ] Postman collection generator
+
 ## Requirment
 - Database : `MySQL`
 - Go v1.14.x
@@ -36,6 +45,10 @@ go run main.go grill repository
 to generate service files
 ```shell script
 go run main.go grill service
+```
+to generate http handler files
+```shell script
+go run main.go grill http-handler
 ```
 to generate implement code
 ```shell script
