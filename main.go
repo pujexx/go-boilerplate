@@ -14,8 +14,9 @@ import (
 	"net/http"
 	"os"
 	"time"
-
 )
+
+
 
 
 
@@ -69,7 +70,7 @@ func main() {
 	pathPrefix.HandleFunc("/ping", func(writer http.ResponseWriter, request *http.Request) {
 		lib.BaseResponse(lib.Response{
 			Code: "200",
-			Data: "pingpong",
+			Data: "ping pong",
 		},writer,request)
 		return
 	})
@@ -81,7 +82,9 @@ func main() {
 
 	generator := gen.NewGenerator(db)
 	generator.GeneratorCLI()
-	http.ListenAndServe(":8000",r)
+	if err := http.ListenAndServe(":8000",r); err != nil {
+		panic(err)
+	}
 	fmt.Println("service on")
 
 }
