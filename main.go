@@ -14,7 +14,9 @@ import (
 	"net/http"
 	"os"
 	"time"
+
 )
+
 
 
 
@@ -49,7 +51,7 @@ func main() {
 			Colorful:      true,
 		},
 	)
-	con := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v",*user,*password, *host,"3306",*dbname)
+	con := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?parseTime=true",*user,*password, *host,"3306",*dbname)
 	db, err := gorm.Open(mysql.Open(con), &gorm.Config{Logger : newLogger })
 
 	if err != nil {

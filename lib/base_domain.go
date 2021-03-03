@@ -7,14 +7,14 @@ import (
 )
 
 type BaseDomain struct {
-	ID        string     `gorm:"unique_index;primary_key;" json:"id,omitempty" validate:"omitempty,uuid"`
+	Id        string     `gorm:"unique_index;primary_key;" json:"id,omitempty" validate:"omitempty,uuid"`
 	CreatedAt time.Time  `json:"created_at"`
 	UpdatedAt time.Time  `json:"-"`
 	DeletedAt *time.Time `sql:"index" json:"-"`
 }
 
 func (baseRepository *BaseDomain) BeforeCreate(scope *gorm.DB) error {
-	baseRepository.ID = uuid.New().String()
+	baseRepository.Id = uuid.New().String()
 	return nil
 }
 
