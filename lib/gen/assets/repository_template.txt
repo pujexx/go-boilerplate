@@ -4,6 +4,7 @@ import (
     "strings"
     "fmt"
     "gorm.io/gorm"
+    "time"
     "{{module_name}}/domain"
     "{{module_name}}/lib"
 {{import}}
@@ -56,6 +57,16 @@ func ({{initial_table}}R {{table_title}}Repository ) Find(page int, filters []li
     })
     return {{initial_table}}s, paginate
 }
+
+
+func ({{initial_table}}R {{table_title}}Repository ) FindRange(from time.Time, to time.Time)([]domain.{{domain_struct}}) {
+    var {{initial_table}}s []domain.{{domain_struct}}
+    db := {{initial_table}}R.DB
+    db = db.Where("created_at <= ? and created_at >= ?", from, to)
+    db.Find(&{{initial_table}}s)
+    return {{initial_table}}s
+}
+
 func ({{initial_table}}R {{table_title}}Repository ) Delete(id string) error {
     return {{initial_table}}R.DB.Where("{{primary_key}} = ?", id).Delete(&domain.{{domain_struct}}{}).Error
 }

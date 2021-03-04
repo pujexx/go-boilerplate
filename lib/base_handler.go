@@ -10,3 +10,8 @@ type BaseHandler interface {
 	Detail(w http.ResponseWriter, r *http.Request)
 	//Router(r *web.RouterHandle)
 }
+
+// swagger:parameters ParameterPage
+type Parameter struct {
+	Page int `json:"page"`
+}

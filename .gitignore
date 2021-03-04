@@ -1,7 +1,26 @@
-*
-!lib
-!go.mod
-!.gitignore
-!.env.example
-!main.go
-!README.md
+# Mac OS X files
+.DS_Store
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Text Editor
+/.idea
+/.vscode
+
+# Dependency directories (remove the comment below to include it)
+.env
+/vendor
+/tmp
+_*
+app

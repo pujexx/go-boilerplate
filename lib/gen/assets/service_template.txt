@@ -1,6 +1,8 @@
 package service
 
 import (
+    "errors"
+    "time"
     "{{module_name}}/domain"
     "{{module_name}}/lib"
 {{import}}
@@ -36,6 +38,16 @@ func ({{initial_table}}S {{table_title}}Service ) Find(page int, filters []lib.F
     {{initial_table}}s , paginate := {{initial_table}}S.Repo.Find(page, filters)
     return {{initial_table}}s, paginate
 }
+
+func ({{initial_table}}S {{table_title}}Service ) FindRange(from time.Time, to time.Time)(error,*[]domain.{{domain_struct}}) {
+    dateRange := lib.DateRange(from, to)
+	if dateRange > 30 || dateRange < 0 {
+		return errors.New("date out of range"), nil
+	}
+    {{initial_table}}s := {{initial_table}}S.Repo.FindRange(from,to)
+    return nil, &{{initial_table}}s
+}
+
 func ({{initial_table}}S {{table_title}}Service ) Delete(id string) error {
     return {{initial_table}}S.Repo.Delete(id)
 }

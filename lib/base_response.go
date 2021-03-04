@@ -5,8 +5,9 @@ import (
 	"net/http"
 )
 
+// swagger:response Response
 type Response struct {
-	Code string `json:"code"`
+	Code string      `json:"code"`
 	Data interface{} `json:"data"`
 	Meta interface{} `json:"meta,omitempty"`
 }
@@ -17,15 +18,15 @@ type ValidateError struct {
 }
 
 type ResponseError struct {
-	Code string `json:"code"`
-	Message string `json:"message"`
-	Errors []ValidateError `json:"errors,omitempty'"`
+	Code    string          `json:"code"`
+	Message string          `json:"message"`
+	Errors  []ValidateError `json:"errors,omitempty'"`
 }
 
 func BaseResponse(data interface{}, w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	
+
 	j, _ := json.Marshal(data)
 	w.Write(j)
 	return

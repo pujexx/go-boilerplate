@@ -10,7 +10,14 @@ import (
 	"reflect"
 )
 
-
+// ShowAccount godoc
+// @Summary Show a account
+// @Description get string by ID
+// @ID get-string-by-int
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Account ID"
+// @Router /accounts/{id} [get]
 
 func ValidateStruct(data interface{}) (bool, []ValidateError) {
 	validate := validator.New()
@@ -24,7 +31,7 @@ func ValidateStruct(data interface{}) (bool, []ValidateError) {
 		en_translations.RegisterDefaultTranslations(validate, trans)
 		for _, e := range validatorErros {
 			errs = append(errs, ValidateError{
-				Field: getJSONName(data,e.Field()),
+				Field: getJSONName(data, e.Field()),
 				Error: e.Translate(trans),
 			})
 		}
@@ -33,10 +40,10 @@ func ValidateStruct(data interface{}) (bool, []ValidateError) {
 	return true, errs
 }
 
-func ValidateVar(data interface{},name string, role string) (bool, []ValidateError) {
+func ValidateVar(data interface{}, name string, role string) (bool, []ValidateError) {
 	validate := validator.New()
 	errs := []ValidateError{}
-	if err := validate.Var(data,role); err != nil {
+	if err := validate.Var(data, role); err != nil {
 		validatorErros := err.(validator.ValidationErrors)
 		logrus.Println("validation", validatorErros)
 		en := en.New()
@@ -46,7 +53,7 @@ func ValidateVar(data interface{},name string, role string) (bool, []ValidateErr
 		for _, e := range validatorErros {
 			errs = append(errs, ValidateError{
 				Field: name,
-				Error: fmt.Sprintf("%v%v",name,e.Translate(trans)),
+				Error: fmt.Sprintf("%v%v", name, e.Translate(trans)),
 			})
 		}
 		return false, errs
@@ -54,14 +61,13 @@ func ValidateVar(data interface{},name string, role string) (bool, []ValidateErr
 	return true, errs
 }
 
-
-func getJSONName(src interface{}, f string) string{
+func getJSONName(src interface{}, f string) string {
 	st := reflect.TypeOf(src)
-	field,_ := st.FieldByName(f)
+	field, _ := st.FieldByName(f)
 	name := field.Tag.Get("json")
 	if name != "" {
 		return name
-	}else {
+	} else {
 		return f
 	}
 }

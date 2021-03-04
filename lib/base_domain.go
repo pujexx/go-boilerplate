@@ -19,7 +19,7 @@ func (baseRepository *BaseDomain) BeforeCreate(scope *gorm.DB) error {
 }
 
 type FilterDomain struct {
-	Field string `json:"field"`
-	Op string `json:"op"`
+	Field string      `json:"field"`
+	Op    string      `json:"op"`
 	Value interface{} `json:"value"`
 }

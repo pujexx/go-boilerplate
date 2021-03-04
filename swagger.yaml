@@ -1,0 +1,13 @@
+info: {}
+paths: {}
+responses:
+  Response:
+    description: ""
+    headers:
+      code:
+        type: string
+      data: {}
+      meta: {}
+    schema:
+      type: object
+swagger: "2.0"

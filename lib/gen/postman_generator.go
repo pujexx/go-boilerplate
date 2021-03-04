@@ -10,11 +10,11 @@ type postManGenerator struct {
 	R *mux.Router
 }
 
-func NewPostmanGenerator(r *mux.Router) *postManGenerator{
+func NewPostmanGenerator(r *mux.Router) *postManGenerator {
 	return &postManGenerator{R: r}
 }
 
-func (p *postManGenerator)Generate(){
+func (p *postManGenerator) Generate() {
 
 	p.R.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
 
@@ -40,8 +40,6 @@ func (p *postManGenerator)Generate(){
 		}
 		name := route.GetName()
 		fmt.Println("name : ", name)
-
-
 
 		return nil
 	})

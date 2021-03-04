@@ -1,0 +1,20 @@
+{
+  "swagger": "2.0",
+  "info": {},
+  "paths": {},
+  "responses": {
+    "Response": {
+      "description": "",
+      "schema": {
+        "type": "object"
+      },
+      "headers": {
+        "code": {
+          "type": "string"
+        },
+        "data": {},
+        "meta": {}
+      }
+    }
+  }
+}

@@ -17,6 +17,7 @@ type {{domain_struct}}Repository interface {
     Update(p *{{domain_struct}}) error
     ByID(id string) ({{domain_struct}},error)
     Find(page int, filters []lib.FilterDomain)([]{{domain_struct}},lib.Paginator)
+    FindRange(from time.Time, to time.Time)([]{{domain_struct}})
     Delete(id string) error
 }
 
@@ -27,5 +28,6 @@ type {{domain_struct}}Service interface {
     Update(p *{{domain_struct}}) error
     ByID(id string) ({{domain_struct}},error)
     Find(page int, filters []lib.FilterDomain)([]{{domain_struct}},lib.Paginator)
+    FindRange(from time.Time, to time.Time)(error,*[]{{domain_struct}})
     Delete(id string) error
 }
