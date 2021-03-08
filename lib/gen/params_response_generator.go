@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func getSize(t string) *string {
+func getSizeParameter(t string) *string {
 	re := regexp.MustCompile(`(?m)\d+`)
 	matches := re.FindAllString(t, 1)
 	if len(matches) > 0 {
@@ -16,7 +16,7 @@ func getSize(t string) *string {
 	return nil
 }
 
-func generateCode(column Column, t string) string {
+func generateCodeParameter(column Column, t string) string {
 	validate := []string{}
 	ifnull := ""
 	if column.Null == "NO" {
@@ -25,7 +25,7 @@ func generateCode(column Column, t string) string {
 	}
 
 	size := ""
-	if s := getSize(column.Type); s != nil {
+	if s := getSizeParameter(column.Type); s != nil {
 		size += "size:" + *s + ";"
 		if t == "string" {
 			validate = append(validate, "max="+*s)
@@ -43,6 +43,10 @@ func generateCode(column Column, t string) string {
 
 	if strings.Contains(t, "bool") {
 		validate = append(validate, "oneof=true false")
+	}
+
+	if strings.Contains(t, "time.Time") {
+		validate = append(validate, "datetime=2006-01-02")
 	}
 
 	if column.Key == "PRI" {
@@ -68,146 +72,142 @@ func generateCode(column Column, t string) string {
 	if len(validate) > 0 {
 		validations = fmt.Sprintf(" validate:\"%v\"", strings.Join(validate, ","))
 	}
-	code := title + " " + t + " `gorm:\"column:" + column.Field + ";" + size + "\" json:\"" + column.Field + "\"" + validations + "`"
+	if t == "time.Time" {
+		t = "string"
+	}
+	code := title + " " + t + " `json:\"" + column.Field + "\"" + validations + "`"
 	return code
 }
 
-func TitleCase(t string) string{
-	titles := strings.Split(t, "_")
-	title := strings.Title(strings.Join(titles, " "))
-	title = strings.Replace(title, " ", "", -1)
-	return title
-}
-
-func ConverterField(column Column) string {
+func ConverterFieldParameter(column Column) string {
 	Type := strings.ToUpper(column.Type)
 	code := "\t"
 	//String data types:
 	if strings.HasPrefix(Type, "CHAR") {
-		code += generateCode(column, "string")
+		code += generateCodeParameter(column, "string")
 	}
 	if strings.HasPrefix(Type, "VARCHAR") {
-		code += generateCode(column, "string")
+		code += generateCodeParameter(column, "string")
 	}
 	if strings.HasPrefix(Type, "BINARY") {
-		code += generateCode(column, "string")
+		code += generateCodeParameter(column, "string")
 	}
 	if strings.HasPrefix(Type, "VARBINARY") {
-		code += generateCode(column, "string")
+		code += generateCodeParameter(column, "string")
 	}
 	if strings.HasPrefix(Type, "TINYBLOB") {
-		code += generateCode(column, "string")
+		code += generateCodeParameter(column, "string")
 	}
 	if strings.HasPrefix(Type, "TINYTEXT") {
-		code += generateCode(column, "string")
+		code += generateCodeParameter(column, "string")
 	}
 	if strings.HasPrefix(Type, "TEXT") {
-		code += generateCode(column, "string")
+		code += generateCodeParameter(column, "string")
 	}
 	if strings.HasPrefix(Type, "BLOB") {
-		code += generateCode(column, "string")
+		code += generateCodeParameter(column, "string")
 	}
 	if strings.HasPrefix(Type, "MEDIUMTEXT") {
-		code += generateCode(column, "string")
+		code += generateCodeParameter(column, "string")
 	}
 	if strings.HasPrefix(Type, "MEDIUMTEXT") {
-		code += generateCode(column, "string")
+		code += generateCodeParameter(column, "string")
 	}
 	if strings.HasPrefix(Type, "MEDIUMBLOB") {
-		code += generateCode(column, "string")
+		code += generateCodeParameter(column, "string")
 	}
 	if strings.HasPrefix(Type, "LONGTEXT") {
-		code += generateCode(column, "string")
+		code += generateCodeParameter(column, "string")
 	}
 	if strings.HasPrefix(Type, "LONGBLOB") {
-		code += generateCode(column, "string")
+		code += generateCodeParameter(column, "string")
 	}
 	if strings.HasPrefix(Type, "ENUM") {
-		code += generateCode(column, "string")
+		code += generateCodeParameter(column, "string")
 	}
 
 	if strings.HasPrefix(Type, "SET") {
-		code += generateCode(column, "string")
+		code += generateCodeParameter(column, "string")
 	}
 
 	//numeric data type
 	if strings.HasPrefix(Type, "BIT") {
-		code += generateCode(column, "int")
+		code += generateCodeParameter(column, "int")
 	}
 	if strings.HasPrefix(Type, "TINYINT") {
-		code += generateCode(column, "int")
+		code += generateCodeParameter(column, "int")
 	}
 	if strings.HasPrefix(Type, "BOOL") {
-		code += generateCode(column, "bool")
+		code += generateCodeParameter(column, "bool")
 	}
 	if strings.HasPrefix(Type, "BOOLEAN") {
-		code += generateCode(column, "bool")
+		code += generateCodeParameter(column, "bool")
 	}
 	if strings.HasPrefix(Type, "SMALLINT") {
-		code += generateCode(column, "bool")
+		code += generateCodeParameter(column, "bool")
 	}
 	if strings.HasPrefix(Type, "MEDIUMINT") {
-		code += generateCode(column, "int")
+		code += generateCodeParameter(column, "int")
 	}
 	if strings.HasPrefix(Type, "INT") {
-		code += generateCode(column, "int")
+		code += generateCodeParameter(column, "int")
 	}
 	if strings.HasPrefix(Type, "INTEGER") {
-		code += generateCode(column, "int")
+		code += generateCodeParameter(column, "int")
 	}
 	if strings.HasPrefix(Type, "BIGINT") {
-		code += generateCode(column, "int64")
+		code += generateCodeParameter(column, "int64")
 	}
 	if strings.HasPrefix(Type, "FLOAT") {
-		code += generateCode(column, "float")
+		code += generateCodeParameter(column, "float")
 	}
 	if strings.HasPrefix(Type, "DOUBLE") {
-		code += generateCode(column, "double")
+		code += generateCodeParameter(column, "double")
 	}
 	if strings.HasPrefix(Type, "DECIMAL") {
-		code += generateCode(column, "double")
+		code += generateCodeParameter(column, "double")
 	}
 
 	if strings.HasPrefix(Type, "DEC") {
-		code += generateCode(column, "double")
+		code += generateCodeParameter(column, "double")
 	}
 
 	if strings.HasPrefix(Type, "DATE") {
-		code += generateCode(column, "time.Time")
+		code += generateCodeParameter(column, "time.Time")
 	}
 
 	if strings.HasPrefix(Type, "TIMESTAMP") {
-		code += generateCode(column, "time.Time")
+		code += generateCodeParameter(column, "time.Time")
 	}
 	if strings.HasPrefix(Type, "TIME") {
-		code += generateCode(column, "time.Time")
+		code += generateCodeParameter(column, "time.Time")
 	}
 	if strings.HasPrefix(Type, "YEAR") {
-		code += generateCode(column, "time.Time")
+		code += generateCodeParameter(column, "time.Time")
 	}
 
 	return code + "\n"
 
 }
 
-type domainGenerator struct {
+type paramGenerator struct {
 	gen GeneratorField
 }
 
-func NewDomainGenerator(gen GeneratorField) *domainGenerator {
-	return &domainGenerator{
+func NewParameterGenerator(gen GeneratorField) *paramGenerator {
+	return &paramGenerator{
 		gen: gen,
 	}
 }
 
-func (n domainGenerator) Generator() {
+func (n paramGenerator) GeneratorParameter() {
 
 	result := n.gen.Tables()
 
 	for _, r := range result {
 		columns := n.gen.Columns(r)
 		title := n.gen.TitleName(r)
-		templateFile, err := ioutil.ReadFile("lib/gen/assets/domain_template.txt")
+		templateFile, err := ioutil.ReadFile("lib/gen/assets/parameter_response_template.txt")
 
 		if err != nil {
 			fmt.Println(err)
@@ -222,47 +222,18 @@ func (n domainGenerator) Generator() {
 				//tempImport = "\"time\"\n"
 				tempImport = append(tempImport, "\t\"time\"")
 			}
-			tempBody += ConverterField(column)
+			tempBody += ConverterFieldParameter(column)
 		}
 
-
-
+		imports := uniqueStrings(tempImport)
+		imports = append(imports, fmt.Sprintf("\t\"%v/lib\"", n.gen.ModuleName()))
+		template = strings.Replace(template, "{{import}}", strings.Join(imports, "\n"), -1)
 		template = strings.Replace(template, "{{domain_struct}}", title, -1)
 		template = strings.Replace(template, "{{fields}}", tempBody, -1)
 		template = strings.Replace(template, "{{table_name}}", r, -1)
 
-		primaryColumn := n.PrimaryKey(r)
-		if strings.Contains(strings.ToUpper(primaryColumn.Type),"CHAR") {
-			tempImport = append(tempImport, "\t\"gorm.io/gorm\"")
-			tempImport = append(tempImport, "\t\"github.com/google/uuid\"")
-			template = strings.Replace(template, "{{customBeforeCreate}}", "baseRepository."+TitleCase(primaryColumn.Field)+" = uuid.New().String()", -1)
-		}else {
-			template = strings.Replace(template, "{{customBeforeCreate}}", "", -1)
-		}
-		imports := uniqueStrings(tempImport)
-		imports = append(imports, fmt.Sprintf("\t\"%v/lib\"", n.gen.ModuleName()))
-		template = strings.Replace(template, "{{import}}", strings.Join(imports, "\n"), -1)
 		fmt.Println(string(template))
-		ioutil.WriteFile("domain/"+r+".go", []byte(template), 0644)
+		ioutil.WriteFile(r+"/handler/http/"+r+"_models.go", []byte(template), 0644)
 		fmt.Println("==========================")
 	}
-}
-
-func (n domainGenerator) PrimaryKey(table string) Column {
-	var column Column
-	n.gen.DB.Raw(fmt.Sprintf("SHOW COLUMNS FROM %v", table)).Scan(&column)
-	return column
-}
-
-
-func uniqueStrings(stringslice []string) []string {
-	keys := make(map[string]bool)
-	list := []string{}
-	for _, entry := range stringslice {
-		if _, value := keys[entry]; !value {
-			keys[entry] = true
-			list = append(list, entry)
-		}
-	}
-	return list
 }

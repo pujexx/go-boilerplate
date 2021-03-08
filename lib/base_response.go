@@ -5,10 +5,14 @@ import (
 	"net/http"
 )
 
-// swagger:response Response
 type Response struct {
+	// Http Code
+	// Example: 200, 400, 401,404
 	Code string      `json:"code"`
+	// Data
 	Data interface{} `json:"data"`
+	// Meta value
+	// Example : pagination
 	Meta interface{} `json:"meta,omitempty"`
 }
 

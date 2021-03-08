@@ -206,6 +206,8 @@ func (g GeneratorField) GeneratorService() {
 
 func (g GeneratorField) GeneratorHttpHandler() {
 	g.CreateDirectory()
+	entity := NewParameterGenerator(g)
+	entity.GeneratorParameter()
 	for _, table := range g.Tables() {
 		g.GenerateHttpHandler(table)
 	}
@@ -296,6 +298,17 @@ func (g GeneratorField) GenerateHttpHandler(table string) {
 	if err != nil {
 		fmt.Println(err)
 	}
+	columns := g.Columns(table)
+	fields := []string{}
+	for _, column := range columns {
+		if strings.Contains(strings.ToUpper(column.Type),"DATE") {
+			fields = append(fields,fmt.Sprintf("\t\t%v : lib.DateFormat(%vParameter.%v)",g.TitleName(column.Field),g.TableName(table), g.TitleName(column.Field)))
+		}else {
+			fields = append(fields,fmt.Sprintf("\t\t%v : %vParameter.%v",g.TitleName(column.Field),g.TableName(table), g.TitleName(column.Field)))
+		}
+
+	}
+
 	template := string(templateFile)
 	template = strings.Replace(template, "{{table_name}}", table, -1)
 	template = strings.Replace(template, "{{module_name}}", g.ModuleName(), -1)
@@ -305,6 +318,7 @@ func (g GeneratorField) GenerateHttpHandler(table string) {
 	template = strings.Replace(template, "{{initial_table}}", g.InitalTableName(table), -1)
 	template = strings.Replace(template, "{{primary_key}}", g.PrimaryKey(table), -1)
 	template = strings.Replace(template, "{{primary_key_title}}", g.PrimaryKeyTitle(table), -1)
+	template = strings.Replace(template, "{{fields_assign}}" , strings.Join(fields,",\n")+",\n", -1)
 
 	fileName := fmt.Sprintf("%v/handler/http/%v_http.go", table, table)
 	fmt.Println(fileName)

@@ -10,14 +10,6 @@ import (
 	"reflect"
 )
 
-// ShowAccount godoc
-// @Summary Show a account
-// @Description get string by ID
-// @ID get-string-by-int
-// @Accept  json
-// @Produce  json
-// @Param id path int true "Account ID"
-// @Router /accounts/{id} [get]
 
 func ValidateStruct(data interface{}) (bool, []ValidateError) {
 	validate := validator.New()

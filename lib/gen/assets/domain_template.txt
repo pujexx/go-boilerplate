@@ -11,6 +11,11 @@ func ({{domain_struct}}) TableName() string {
 	return "{{table_name}}"
 }
 
+func (baseRepository *{{domain_struct}}) BeforeCreate(scope *gorm.DB) error {
+	{{customBeforeCreate}}
+	return nil
+}
+
 // Interface Repository
 type {{domain_struct}}Repository interface {
     Save(p *{{domain_struct}}) error

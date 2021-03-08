@@ -1,0 +1,10 @@
+package http
+
+
+type {{domain_struct}}Parameter struct{
+{{fields}}
+}
+
+type {{domain_struct}}Response struct{
+{{fields}}
+}

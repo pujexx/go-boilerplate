@@ -7,7 +7,7 @@ Simple Golang REST API Boilerplate with clean Architecture
 - [x] Service generator
 - [x] Http Handler generator
 - [x] Implement on main package generator
-- [ ] Swagger generator
+- [x] Swagger generator
 - [ ] Postman collection generator
 
 ## Requirment
