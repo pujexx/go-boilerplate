@@ -60,3 +60,9 @@ thanos gauntlet snap
 go run main.go grill all
 ```
 
+## Swagger Documentation
+follow the instruction on : https://github.com/swaggo/swag
+```
+swag init
+```
+
